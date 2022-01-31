@@ -42,11 +42,11 @@ int compute_score(string word)
     int sum = 0;
     while (word[i] != '\0')
     {
-        if (word[i] > 'A' && word[i] < 'Z' )
+        if (word[i] >= 'A' && word[i] <= 'Z' )                  // 别忘记等号
         {
             sum += POINTS[word[i] - 65];
         }
-        else if (word[i] > 'a' && word[i] < 'z')
+        else if (word[i] >= 'a' && word[i] <= 'z')
         {
             sum += POINTS[word[i] - 97];
         }
