@@ -167,15 +167,15 @@ bool print_winner(void)
 {
     // TODO
     // voter_count除以2四舍五入
-    int major_voter = ((int)(voter_count / 2.0 * 10.0) % 10 >= 5) ? (voter_count / 2 + 1) : (voter_count / 2);
-    
+    // int major_voter = ((int)(voter_count / 2.0 * 10.0) % 10 >= 5) ? (voter_count / 2 + 1) : (voter_count / 2);
+    int major_voter = voter_count / 2;          // 无需四舍五入
     // 用以最后判断是否存在（至少有一个winner）
     int flag = 0;
 
     for (int i = 0; i < candidate_count; i++)
     {
         // 既是没有被淘汰的，又是票数大于等于一半的投票者以上的竞选者被打印
-        if (!candidates[i].eliminated && candidates[i].votes >= major_voter)
+        if (!candidates[i].eliminated && candidates[i].votes > major_voter) // 这里大于等于换成大于即可
         {
             printf("%s\n", candidates[i].name);
             flag = 1;
@@ -242,7 +242,7 @@ void eliminate(int min)
     {
         if (!candidates[i].eliminated && candidates[i].votes == min)
         {
-            candidates[i].eliminated = 1;
+            candidates[i].eliminated = true;
             candidate_count--;
         }
     }
