@@ -1,11 +1,17 @@
-sort1 uses: TODO
+sort1 uses: Bubble Sort
 
-How do you know?: TODO
+How do you know?: 根据以下分析，通过排除法可得知sort1是冒泡排序；
 
-sort2 uses: TODO
+sort2 uses: Merge Sort
 
-How do you know?: TODO
+How do you know?: 归并排序是O(nlogn)，冒泡排序和选择排序是O(n^2)，利用reversed三组数据可得知三个排序中耗费时间最短的就为归并排序；
 
-sort3 uses: TODO
+sort3 uses: Selection Sort
 
-How do you know?: TODO
+How do you know?: 选择排序是Ω(n^2)，而冒泡排序是和归并排序是Ω(n)，利用sorted三组数据选择其中耗时最长的排序程序就是选择排序；
+
+简写：
+一、sorted数据=>selection sort最慢
+二、reversed数据=>bubble sort和selection sort最慢，merge sort最快
+三、根据一、二分别确认sort3是Selection sort，sort2是Merge sort
+四、根据排除法，sort1是Bubble sort
