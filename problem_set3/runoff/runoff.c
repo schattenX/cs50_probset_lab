@@ -175,14 +175,14 @@ bool print_winner(void)
     for (int i = 0; i < candidate_count; i++)
     {
         // 既是没有被淘汰的，又是票数大于等于一半的投票者以上的竞选者被打印
-        if (!candidates[i].eliminared && candidates[i].votes >= major_voter)
+        if (!candidates[i].eliminated && candidates[i].votes >= major_voter)
         {
             printf("%s\n", candidates[i].name);
             flag = 1;
         }
     }
 
-    if (flag = 1) return true;
+    if (flag == 1) return true;
 
     return false;
 }
@@ -197,7 +197,7 @@ int find_min(void)
         // 竞选者参与最少票数计算，当且仅当没有被淘汰且票数比预设min还小
         if (!candidates[i].eliminated && min > candidates[i].votes)
         {
-            min = candidates.[i].votes;
+            min = candidates[i].votes;
         }
     }
 
@@ -214,7 +214,7 @@ bool is_tie(int min)
 
     for (int i = 0; i < candidate_count; i++)
     {
-        if (!candidates[i]eliminated)
+        if (!candidates[i].eliminated)
         {
             remaining_pnum++;
         }
