@@ -156,7 +156,7 @@ void tabulate(void)
         // 若存在有竞选者被淘汰
         else
         {
-            rank = ++Ranks[i];                      // 有竞选者被淘汰
+            rank = ++Ranks[i];                      // 有竞选者被淘汰，则第i+1个voter默认偏好置为次偏好
 
             candidates[preferences[i][rank]].votes++;
         }
