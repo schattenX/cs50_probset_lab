@@ -66,29 +66,29 @@ int main(int argc, string argv[])
     // Keep querying for votes
     for (int i = 0; i < voter_count; i++)
     {
-
+        
         // Query for each rank
         for (int j = 0; j < candidate_count; j++)
         {
             string name = get_string("Rank %i: ", j + 1);
-
+            
             // Record vote, unless it's invalid
             if (!vote(i, j, name))
             {
                 printf("Invalid vote.\n");
                 return 4;
             }
+           
         }
 
         printf("\n");
     }
-
+    
     // Keep holding runoffs until winner exists
     while (true)
     {
         // Calculate votes given remaining candidates
         tabulate();
-
         // Check if election has been won
         bool won = print_winner();
         if (won)
@@ -99,7 +99,6 @@ int main(int argc, string argv[])
         // Eliminate last-place candidates
         int min = find_min();                           // 寻找票数最少的
         bool tie = is_tie(min);                         // 判断所有人票数都是最少且相同
-
         // If tie, everyone wins
         if (tie)
         {
@@ -115,7 +114,6 @@ int main(int argc, string argv[])
 
         // Eliminate anyone with minimum number of votes
         eliminate(min);                                 // 若存在n个竞选者满足 N.votes == min && 0 < N(N.votes=min) < candidate_count
-
         // Reset vote counts back to zero
         for (int i = 0; i < candidate_count; i++)
         {
@@ -146,6 +144,8 @@ void tabulate(void)
 {
     // TODO
     int Ranks[voter_count];                          // 记录用于计算票数的voter偏好下标，rank[i]默认初始化都为零
+    for (int i = 0; i < voter_count; i++) Ranks[i] = 0;
+    
     for (int i = 0; i < voter_count; i++)           // rank[i] = 0表示第i+1个voter的第一个偏好，其他的以此类推
     {
         int rank = Ranks[i];
@@ -156,8 +156,8 @@ void tabulate(void)
         // 若存在有竞选者被淘汰
         else
         {
-            rank = ++Ranks[i];                      // 有竞选者被淘汰，则第i+1个voter默认偏好置为次偏好
-
+            for (rank = ++Ranks[i]; candidates[preferences[i][rank]].eliminated == true; rank = ++Ranks[i]);
+            rank = Ranks[i];
             candidates[preferences[i][rank]].votes++;
         }
     }
