@@ -97,8 +97,8 @@ int main(int argc, string argv[])
         }
 
         // Eliminate last-place candidates
-        int min = find_min();                           // 寻找票数最少的
-        bool tie = is_tie(min);                         // 判断所有人票数都是最少且相同
+        int min = find_min();                         // 寻找票数最少的
+        bool tie = is_tie(min);                       // 判断所有人票数都是最少且相同
         // If tie, everyone wins
         if (tie)
         {
@@ -113,7 +113,7 @@ int main(int argc, string argv[])
         }
 
         // Eliminate anyone with minimum number of votes
-        eliminate(min);                                 // 若存在n个竞选者满足 N.votes == min && 0 < N(N.votes=min) < candidate_count
+        eliminate(min);                               // 若存在n个竞选者满足 N.votes == min && 0 < N(N.votes=min) < candidate_count
         // Reset vote counts back to zero
         for (int i = 0; i < candidate_count; i++)
         {
@@ -146,7 +146,7 @@ void tabulate(void)
     int Ranks[voter_count];                          // 记录用于计算票数的voter偏好下标，rank[i]默认初始化都为零
     for (int i = 0; i < voter_count; i++) Ranks[i] = 0;
     
-    for (int i = 0; i < voter_count; i++)           // rank[i] = 0表示第i+1个voter的第一个偏好，其他的以此类推
+    for (int i = 0; i < voter_count; i++)            // rank[i] = 0表示第i+1个voter的第一个偏好，其他的以此类推
     {
         int rank = Ranks[i];
         if (!candidates[preferences[i][rank]].eliminated)
@@ -232,7 +232,7 @@ bool is_tie(int min)
     }
     // 若余下的人中，每个竞选者票数都相同且都为min，则返回true
     if (pnum_equal_min == remaining_pnum) return true;
-    // 
+ 
     return false;
 }
 
