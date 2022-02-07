@@ -145,9 +145,10 @@ bool vote(int voter, int rank, string name)
 void tabulate(void)
 {
     // TODO
-    int rank = 0;
-    for (int i = 0; i < voter_count; i++)
+    int Ranks[voter_count];                          // 记录用于计算票数的voter偏好下标，rank[i]默认初始化都为零
+    for (int i = 0; i < voter_count; i++)           // rank[i] = 0表示第i+1个voter的第一个偏好，其他的以此类推
     {
+        int rank = Ranks[i];
         if (!candidates[preferences[i][rank]].eliminated)
         {
             candidates[preferences[i][rank]].votes++;
@@ -155,7 +156,9 @@ void tabulate(void)
         // 若存在有竞选者被淘汰
         else
         {
-           candidates[preferences[i][rank + 1]].votes++;
+            rank = ++Ranks[i];                      // 有竞选者被淘汰
+
+            candidates[preferences[i][rank]].votes++;
         }
     }
 
@@ -243,7 +246,7 @@ void eliminate(int min)
         if (!candidates[i].eliminated && candidates[i].votes == min)
         {
             candidates[i].eliminated = true;
-            candidate_count--;
+           // candidate_count--;        无需此行，只需要做形式的删除eliminated = 1；否则120~123行会出现逻辑错误
         }
     }
 
