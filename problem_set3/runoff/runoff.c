@@ -132,8 +132,8 @@ bool vote(int voter, int rank, string name)
     {
         if (strcmp(name, candidates[i].name) == 0)  // 遍历结构体数组找到被投票者所在结构体数组内的下标
         {
-            preferences[voter][rank] = i;           // preferences记录第voter个选民的第rank个评级所竞选的对象，其在candidates数组中
-            return true;                            // 所对应相同竞选对象名称的下标或索引
+            preferences[voter][rank] = i;           // preferences记录第voter+1个选民的第rank+1个评级所竞选的对象，
+            return true;                            // 其在candidates数组中，所对应相同竞选对象名称的下标或索引
         }
     }
     return false;
@@ -143,19 +143,21 @@ bool vote(int voter, int rank, string name)
 void tabulate(void)
 {
     // TODO
-    int Ranks[voter_count];                          // 记录用于计算票数的voter偏好下标，rank[i]默认初始化都为零
+    int Ranks[voter_count];                          // 记录用于计算票数的voter偏好下标，Ranks[i]默认初始化都为零
     for (int i = 0; i < voter_count; i++) Ranks[i] = 0;
     
-    for (int i = 0; i < voter_count; i++)            // rank[i] = 0表示第i+1个voter的第一个偏好，其他的以此类推
+    for (int i = 0; i < voter_count; i++)            // Ranks[i] = 0表示第i+1个voter的第一(0+1)个偏好，其他的以此类推
     {
-        int rank = Ranks[i];
+        int rank = Ranks[i];                         // 获取第i+1个voter的当前偏好
         if (!candidates[preferences[i][rank]].eliminated)
         {
+            // 如果第i+1个voter的偏好rank+1对应的竞选者没有被eliminated，那么给此人投一票
             candidates[preferences[i][rank]].votes++;
         }
         // 若存在有竞选者被淘汰
         else
         {
+            // 遍历当前voter的偏好，找到没有被eliminated的竞选对象，并给他投一票
             for (rank = ++Ranks[i]; candidates[preferences[i][rank]].eliminated == true; rank = ++Ranks[i]);
             rank = Ranks[i];
             candidates[preferences[i][rank]].votes++;
@@ -171,20 +173,20 @@ bool print_winner(void)
     // TODO
     // voter_count除以2四舍五入
     // int major_voter = ((int)(voter_count / 2.0 * 10.0) % 10 >= 5) ? (voter_count / 2 + 1) : (voter_count / 2);
-    int major_voter = voter_count / 2;          // 无需四舍五入
+    int major_voter = voter_count / 2;              // 无需四舍五入
     // 用以最后判断是否存在（至少有一个winner）
     int flag = 0;
 
     for (int i = 0; i < candidate_count; i++)
     {
-        // 既是没有被淘汰的，又是票数大于等于一半的投票者以上的竞选者被打印
+        // 既是没有被淘汰的，又是票数大于一半的投票者以上的竞选者被打印
         if (!candidates[i].eliminated && candidates[i].votes > major_voter) // 这里大于等于换成大于即可
         {
             printf("%s\n", candidates[i].name);
             flag = 1;
         }
     }
-
+    // 若至少有一个winner，则返回true
     if (flag == 1) return true;
 
     return false;
@@ -197,7 +199,7 @@ int find_min(void)
     int min = candidates[0].votes;
     for (int i = 1; i < candidate_count; i++)
     {
-        // 竞选者参与最少票数计算，当且仅当没有被淘汰且票数比预设min还小
+        // 竞选者参与最少票数查找，当且仅当没有被淘汰且票数比预设min还小
         if (!candidates[i].eliminated && min > candidates[i].votes)
         {
             min = candidates[i].votes;
@@ -211,11 +213,11 @@ int find_min(void)
 bool is_tie(int min)
 {
     // TODO
-    // 与最小值min相等的总人数
-    int pnum_equal_min = 0;
-    int remaining_pnum = 0;
+    
+    int pnum_equal_min = 0;                         // 表示与最小值min相等的总人数
+    int remaining_pnum = 0;                         // 未被淘汰的剩余人数
 
-    for (int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++)       // 查找“未被淘汰的剩余人数”
     {
         if (!candidates[i].eliminated)
         {
@@ -223,7 +225,7 @@ bool is_tie(int min)
         }
     }
 
-    for (int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++)       // 查找“持有最小票数min的人数”
     {
         if (!candidates[i].eliminated && candidates[i].votes == min)
         {
@@ -240,13 +242,14 @@ bool is_tie(int min)
 void eliminate(int min)
 {
     // TODO
-    int temp = candidate_count;
-    for (int i = 0; i < temp; i++)
+
+    for (int i = 0; i < candidate_count; i++)
     {
-        if (!candidates[i].eliminated && candidates[i].votes == min)
+        // 避免执行重复删除的误操作
+        if (!candidates[i].eliminated && candidates[i].votes == min)    
         {
             candidates[i].eliminated = true;
-           // candidate_count--;        无需此行，只需要做形式的删除eliminated = 1；否则120~123行会出现逻辑错误
+           // candidate_count--;        无需此行，只需要做形式的删除eliminated = 1；否则118~120行会出现逻辑错误
         }
     }
 
